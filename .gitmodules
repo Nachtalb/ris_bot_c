@@ -1,0 +1,3 @@
+[submodule "third_party/telebot"]
+	path = third_party/telebot
+	url = https://github.com/smartnode/telebot.git
