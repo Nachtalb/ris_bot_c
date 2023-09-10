@@ -4,6 +4,7 @@ project(ris_bot)
 add_subdirectory(third_party/telebot)
 
 set(SRC src/main.c)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(${PROJECT_NAME} ${SRC})
 
