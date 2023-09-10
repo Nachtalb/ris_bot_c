@@ -20,6 +20,6 @@ typedef enum message_type {
 typedef void (*message_handler_t)(telebot_handler_t, telebot_update_t);
 
 typedef struct message_handler_entry {
-  message_type_t type;
+  message_type_t    type;
   message_handler_t handler;
 } message_handler_entry_t;
