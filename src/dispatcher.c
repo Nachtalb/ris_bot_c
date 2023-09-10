@@ -16,18 +16,24 @@ command_handler_entry_t registered_command_handlers[MAX_HANDLERS];
 int count_registered_command_handlers = 0;
 
 void register_handler(update_handler_t message_handler,
-                      message_type_t message_type) {
-  registered_handlers[count_registered_handlers].type    = message_type;
-  registered_handlers[count_registered_handlers].handler = message_handler;
+                      message_type_t message_type, bool accept_commands) {
+  message_handler_entry_t *entry =
+    &registered_handlers[count_registered_handlers];
+  entry->type            = message_type;
+  entry->handler         = message_handler;
+  entry->accept_commands = accept_commands;
+
   count_registered_handlers++;
 }
 
 void register_command_handler(command_handler_t command_handler,
                               const char *command) {
-  registered_command_handlers[count_registered_command_handlers].command =
-    command;
-  registered_command_handlers[count_registered_command_handlers].handler =
-    command_handler;
+  command_handler_entry_t *entry =
+    &registered_command_handlers[count_registered_command_handlers];
+
+  entry->command = command;
+  entry->handler = command_handler;
+
   count_registered_command_handlers++;
 }
 
@@ -59,7 +65,8 @@ void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   message_type_t message_t = get_message_type(message);
 
   for (int i = 0; i < count_registered_handlers; i++) {
-    if (message_t == registered_handlers[i].type) {
+    if (message_t == registered_handlers[i].type && message.text &&
+        (registered_handlers[i].accept_commands || message.text[0] != '/')) {
       registered_handlers[i].handler(handle, update);
     }
   }

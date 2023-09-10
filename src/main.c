@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 
   telebot_put_me(&me);
 
-  register_handler(echo, MESSAGE_TYPE_TEXT);
+  register_handler(echo, MESSAGE_TYPE_TEXT, false);
   register_command_handler(start_command, "start");
 
   if (start_dispatcher(handle) == false) {
