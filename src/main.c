@@ -1,4 +1,4 @@
-#include "dispatcher.c"
+#include "dispatcher.h"
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -7,12 +7,6 @@
 #include <telebot/telebot.h>
 #include <unistd.h>
 
-/**
- * @brief Handles incoming text messages and echoes them back.
- *
- * @param handle The Telegram bot handler.
- * @param update The received update.
- */
 void echo(telebot_handler_t handle, telebot_update_t update) {
   telebot_error_e   ret;
   telebot_message_t message = update.message;
@@ -35,14 +29,6 @@ void echo(telebot_handler_t handle, telebot_update_t update) {
   }
 }
 
-/**
- * @brief Handles the '/start' command.
- *
- * @param handle The Telegram bot handler.
- * @param update The received update.
- * @param command The command itself.
- * @param args Additional text following the command.
- */
 void start_command(telebot_handler_t handle, telebot_update_t update,
                    const char *command, const char *args) {
   telebot_error_e   ret;
