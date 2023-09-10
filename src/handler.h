@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef HANDLER_H
+#define HANDLER_H
 
 #include <telebot/telebot-types.h>
 
@@ -22,4 +22,4 @@ void echo(telebot_handler_t handle, telebot_update_t update);
 void start_command(telebot_handler_t handle, telebot_update_t update,
                    const char *command, const char *args);
 
-#endif // MAIN_H
+#endif // HANDLER_H
