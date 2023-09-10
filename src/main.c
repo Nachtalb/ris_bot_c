@@ -16,15 +16,12 @@ void echo(telebot_handler_t handle, telebot_update_t update) {
   if (strstr(message.text, "/dice")) {
     telebot_send_dice(handle, message.chat->id, false, 0, "");
   } else {
-    char str[4096];
-    if (strstr(message.text, "/start")) {
-      snprintf(str, SIZE_OF_ARRAY(str), "Hello %s", message.from->first_name);
-    } else {
-      snprintf(str, SIZE_OF_ARRAY(str), "<i>%s</i>", message.text);
-    }
+    char *str;
+    asprintf(&str, "<i>%s</i>", message.text);
 
     ret = telebot_send_message(handle, message.chat->id, str, "HTML", false,
                                false, update.message.message_id, "");
+    free(str);
   }
 
   if (ret != TELEBOT_ERROR_NONE) {
