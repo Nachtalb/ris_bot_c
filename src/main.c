@@ -14,7 +14,7 @@ void echo(telebot_handler_t handle, telebot_update_t update) {
   printf("%s: %s \n", message.from->first_name, message.text);
 
   if (strstr(message.text, "/dice")) {
-    telebot_send_dice(handle, message.chat->id, false, 0, "");
+    ret = telebot_send_dice(handle, message.chat->id, false, 0, "");
   } else {
     char *str;
     asprintf(&str, "<i>%s</i>", message.text);
