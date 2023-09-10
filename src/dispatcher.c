@@ -12,6 +12,25 @@
 message_handler_entry_t registered_handlers[MAX_HANDLERS];
 int count_registered_handlers = 0;
 
+command_handler_entry_t registered_command_handlers[MAX_HANDLERS];
+int count_registered_command_handlers = 0;
+
+void register_handler(update_handler_t message_handler,
+                      message_type_t message_type) {
+  registered_handlers[count_registered_handlers].type    = message_type;
+  registered_handlers[count_registered_handlers].handler = message_handler;
+  count_registered_handlers++;
+}
+
+void register_command_handler(command_handler_t command_handler,
+                              const char *command) {
+  registered_command_handlers[count_registered_command_handlers].command =
+    command;
+  registered_command_handlers[count_registered_command_handlers].handler =
+    command_handler;
+  count_registered_command_handlers++;
+}
+
 static message_type_t get_message_type(telebot_message_t message) {
   if (message.text) {
     return MESSAGE_TYPE_TEXT;
@@ -34,13 +53,6 @@ static message_type_t get_message_type(telebot_message_t message) {
   }
 }
 
-void register_handler(message_handler_t message_handler,
-                      message_type_t message_type) {
-  registered_handlers[count_registered_handlers].type    = message_type;
-  registered_handlers[count_registered_handlers].handler = message_handler;
-  count_registered_handlers++;
-}
-
 void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   telebot_message_t message = update.message;
 
@@ -49,6 +61,30 @@ void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   for (int i = 0; i < count_registered_handlers; i++) {
     if (message_t == registered_handlers[i].type) {
       registered_handlers[i].handler(handle, update);
+    }
+  }
+
+  if (message_t == MESSAGE_TYPE_TEXT && message.text[0] == '/') {
+    char *space = strchr(message.text, ' ');
+    char *command, *args;
+
+    if (space) {
+      command = strndup(message.text + 1, space - message.text - 1);
+      args    = strdup(space + 1);
+    } else {
+      command = strdup(message.text + 1);
+      args    = NULL;
+    }
+
+    for (int i = 0; i < count_registered_command_handlers; i++) {
+      if (strcmp(command, registered_command_handlers[i].command) == 0) {
+        registered_command_handlers[i].handler(handle, update, command, args);
+      }
+    }
+
+    free(command);
+    if (args) {
+      free(args);
     }
   }
 }

@@ -29,6 +29,22 @@ void echo(telebot_handler_t handle, telebot_update_t update) {
   }
 }
 
+void start_command(telebot_handler_t handle, telebot_update_t update,
+                   const char *command, const char *args) {
+  telebot_error_e   ret;
+  telebot_message_t message = update.message;
+
+  char *str;
+  asprintf(&str, "Hello %s", message.from->first_name);
+  ret = telebot_send_message(handle, message.chat->id, str, "HTML", false,
+                             false, update.message.message_id, "");
+  free(str);
+
+  if (ret != TELEBOT_ERROR_NONE) {
+    printf("Failed to send message: %d \n", ret);
+  }
+}
+
 int main(int argc, char *argv[]) {
   printf("Welcome to Echobot\n");
 
@@ -65,6 +81,7 @@ int main(int argc, char *argv[]) {
   telebot_put_me(&me);
 
   register_handler(echo, MESSAGE_TYPE_TEXT);
+  register_command_handler(start_command, "start");
 
   if (start_dispatcher(handle) == false) {
     return -1;
