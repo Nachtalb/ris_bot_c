@@ -62,12 +62,6 @@ static message_type_t get_message_type(telebot_message_t message) {
   }
 }
 
-/**
- * @brief Dispatches updates to appropriate handlers.
- *
- * @param handle The Telegram bot handler.
- * @param update The received update.
- */
 void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   telebot_message_t message = update.message;
 
@@ -105,12 +99,6 @@ void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   }
 }
 
-/**
- * @brief Starts the update dispatching loop.
- *
- * @param handle The Telegram bot handler.
- * @return True if the dispatcher started successfully, otherwise False.
- */
 bool start_dispatcher(telebot_handler_t handle) {
   int                   count, offset = -1;
   telebot_error_e       ret;

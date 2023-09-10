@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <telebot/telebot-types.h>
 
-#define SIZE_OF_ARRAY(array) (sizeof(array) / sizeof(array[0]))
-#define MAX_HANDLERS 100
+#define SIZE_OF_ARRAY(array)    (sizeof(array) / sizeof(array[0]))
+#define MAX_HANDLERS    100
 
 /**
  * @brief Array of registered message handlers.
@@ -34,6 +34,7 @@ extern int count_registered_command_handlers;
  */
 void register_handler(update_handler_t message_handler,
                       message_type_t message_type, bool accept_commands);
+
 /**
  * @brief Registers a handler for a specific command.
  *
@@ -42,6 +43,7 @@ void register_handler(update_handler_t message_handler,
  */
 void register_command_handler(command_handler_t command_handler,
                               const char *command);
+
 /**
  * @brief Dispatches updates to appropriate handlers.
  *

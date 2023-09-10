@@ -28,9 +28,9 @@ typedef void (*update_handler_t)(telebot_handler_t, telebot_update_t);
  * @brief Structure for registering message handlers.
  */
 typedef struct message_handler_entry {
-  message_type_t type;
+  message_type_t   type;
   update_handler_t handler;
-  bool accept_commands;
+  bool             accept_commands;
 } message_handler_entry_t;
 
 /**
@@ -43,7 +43,7 @@ typedef void (*command_handler_t)(telebot_handler_t, telebot_update_t,
  * @brief Structure for registering command handlers.
  */
 typedef struct command_handler_entry {
-  const char *command;
+  const char *      command;
   command_handler_t handler;
 } command_handler_entry_t;
 
