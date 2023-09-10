@@ -9,12 +9,43 @@
 #define SIZE_OF_ARRAY(array)    (sizeof(array) / sizeof(array[0]))
 #define MAX_HANDLERS    100
 
+/**
+ * @brief Array of registered message handlers.
+ *
+ * Stores all the message handlers that have been registered.
+ * Used for dispatching updates to appropriate handlers.
+ */
 message_handler_entry_t registered_handlers[MAX_HANDLERS];
+
+/**
+ * @brief Count of registered message handlers.
+ *
+ * Keeps track of the number of message handlers that have been registered.
+ */
 int count_registered_handlers = 0;
 
+/**
+ * @brief Array of registered command handlers.
+ *
+ * Stores all the command handlers that have been registered.
+ * Used for dispatching commands to appropriate handlers.
+ */
 command_handler_entry_t registered_command_handlers[MAX_HANDLERS];
+
+/**
+ * @brief Count of registered command handlers.
+ *
+ * Keeps track of the number of command handlers that have been registered.
+ */
 int count_registered_command_handlers = 0;
 
+/**
+ * @brief Registers a message handler for a specific message type.
+ *
+ * @param message_handler The message handler function.
+ * @param message_type The type of message to handle.
+ * @param accept_commands If the handler should accept command messages.
+ */
 void register_handler(update_handler_t message_handler,
                       message_type_t message_type, bool accept_commands) {
   message_handler_entry_t *entry =
@@ -26,6 +57,12 @@ void register_handler(update_handler_t message_handler,
   count_registered_handlers++;
 }
 
+/**
+ * @brief Registers a handler for a specific command.
+ *
+ * @param command_handler The command handler function.
+ * @param command The command to handle.
+ */
 void register_command_handler(command_handler_t command_handler,
                               const char *command) {
   command_handler_entry_t *entry =
@@ -37,6 +74,12 @@ void register_command_handler(command_handler_t command_handler,
   count_registered_command_handlers++;
 }
 
+/**
+ * @brief Determines the message type from a Telegram message.
+ *
+ * @param message The Telegram message.
+ * @return The type of the message.
+ */
 static message_type_t get_message_type(telebot_message_t message) {
   if (message.text) {
     return MESSAGE_TYPE_TEXT;
@@ -59,6 +102,12 @@ static message_type_t get_message_type(telebot_message_t message) {
   }
 }
 
+/**
+ * @brief Dispatches updates to appropriate handlers.
+ *
+ * @param handle The Telegram bot handler.
+ * @param update The received update.
+ */
 void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   telebot_message_t message = update.message;
 
@@ -96,6 +145,12 @@ void dispatch_update(telebot_handler_t handle, telebot_update_t update) {
   }
 }
 
+/**
+ * @brief Starts the update dispatching loop.
+ *
+ * @param handle The Telegram bot handler.
+ * @return True if the dispatcher started successfully, otherwise False.
+ */
 bool start_dispatcher(telebot_handler_t handle) {
   int                   count, offset = -1;
   telebot_error_e       ret;
